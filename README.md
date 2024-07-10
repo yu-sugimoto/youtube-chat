@@ -20,7 +20,7 @@ RAGの実装は以下の構成である.
 
 ## デモ
 
-準備中...
+[youtube_chat_demo.webm](https://github.com/yu-sugimoto/youtube-chat/tree/main/assets/youtube_chat_demo)
 
 ## 使用技術
 
