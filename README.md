@@ -11,8 +11,9 @@ Youtubeで海外のコンテンツをよく見ますが, 1時間近くあるも�
 ユーザーからYoutube動画のリンクを受け取ると, その動画をダウンロードし, 文字起こしされたトランスクリプトを取得, 要約してチャットボットが出力します. 
 その後, Websocket接続を行い, 非同期でRAGを用いた質疑応答が可能になります. 
 
-RAGの実装は以下の構成です.  
-※質疑応答を日本語で行うため, 日本語以外の動画も考慮して最初にドキュメントを日本語に翻訳（ベクトル検索では言語を統一する方が精度が向上する）
+### RAGの実装  
+※質疑応答を日本語で行うため, 日本語以外の動画も考慮して最初にドキュメントを日本語に翻訳  
+（ベクトル検索では言語を統一する方が精度が向上する）
 1. ドキュメントの読み込み（文字起こしされたトランスクリプトを使用）  
 2. ドキュメントの変換
 3. テキストデータのベクトル化  
@@ -29,6 +30,7 @@ RAGの実装は以下の構成です.
 - Django 4.2.1
 - tailwindcss
 - htmx
+- pytube
 - OpenAI
 - LangChain
 - Django Channels
@@ -45,6 +47,7 @@ pip install .
 次に, 必要なパッケージのインストールします. 
 ```
 pip install django
+pip install pytube
 pip install openai
 pip install langchain langchain-openai openai
 pip install langchain-community
