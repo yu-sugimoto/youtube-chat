@@ -22,7 +22,7 @@ Youtubeで海外のコンテンツをよく見ますが, 1時間近くあるも�
 
 ## デモ
 
-[youtube_chat_demo.webm](https://github.com/yu-sugimoto/youtube-chat/assets/94701688/50bf1f7d-d7e4-43f0-bda3-02acd8e5728b)
+[youtube_chat_demo_720.webm](https://github.com/yu-sugimoto/youtube-chat/assets/94701688/4b4781f5-998a-4512-a1ca-ac6d60de4155)
 
 ## 使用技術
 
