@@ -77,9 +77,6 @@ Youtube自体の変更によって頻出するエラーですので取り上げ�
 │  LICENSE
 │  manage.py
 │  README.md
-│  
-├─assets
-│      youtube_chat_demo.MOV
 │
 ├─chat_generator
 │  │  admin.py
