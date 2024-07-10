@@ -24,7 +24,17 @@ RAGの実装は以下の構成である.
 
 ## 使用技術
 
-### インストール
+- Python 3.11.0
+- Django 4.2.1
+- tailwindcss
+- htmx
+- OpenAI
+- LangChain
+- Django Channels
+- Faiss
+
+
+## インストール
 
 まず, このアプリケーションをインストールします. 
 ```
@@ -39,6 +49,7 @@ pip install langchain langchain-openai openai
 pip install langchain-community
 pip install tiktoken
 pip install faiss-cpu
+pip install anyio
 ```
 
 最後に, 必要なAPIキーを 'settings.py' に追加します. 
@@ -48,11 +59,69 @@ OPENAI_API_KEY = "sk-***"
 ASSMBLYAI＿API_KEY = "*******"
 ```
 
-### pytubeに関するエラー
+### ※pytubeに関するエラー
 
-Youtube自体の変更によって頻出するエラーですので取り上げました. 
-https://github.com/pytube/pytube/issues
+Youtube自体の変更によって頻出するエラーですので取り上げました. → https://github.com/pytube/pytube/issues
 
 ## ディレクトリ構造
 
-準備中...
+```
+.
+│  .env
+│  .gitignore
+│  db.sqlite3
+│  LICENSE
+│  manage.py
+│  README.md
+│  
+├─assets
+│      youtube_chat_demo.MOV
+│
+├─chat_generator
+│  │  admin.py
+│  │  apps.py
+│  │  consumers.py
+│  │  models.py
+│  │  routing.py
+│  │  urls.py
+│  │  views.py
+│  │  __init__.py
+│  │
+│  ├─migrations
+│  │  │  __init__.py
+│  │  │
+│  │  └─__pycache__
+│  │          __init__.cpython-311.pyc
+│  │
+│  └─__pycache__
+│          admin.cpython-311.pyc
+│          apps.cpython-311.pyc
+│          consumers.cpython-311.pyc
+│          models.cpython-311.pyc
+│          routing.cpython-311.pyc
+│          urls.cpython-311.pyc
+│          views.cpython-311.pyc
+│          __init__.cpython-311.pyc
+│
+├─media
+│  └─faiss_store
+├─templates
+│  │  index.html
+│  │
+│  └─ws
+│          chat_message.html
+│
+└─youtube_chat
+    │  asgi.py
+    │  settings.py
+    │  urls.py
+    │  wsgi.py
+    │  __init__.py
+    │
+    └─__pycache__
+            asgi.cpython-311.pyc
+            settings.cpython-311.pyc
+            urls.cpython-311.pyc
+            wsgi.cpython-311.pyc
+            __init__.cpython-311.pyc
+```
