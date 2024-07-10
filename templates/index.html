@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youtube Chat</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <script src="https://unpkg.com/htmx.org/dist/ext/ws.js"></script>
+    <!-- This is webkit for circle -->
+    <style>
+        @keyframes rotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to { 
+                transform: rotate(360deg);
+            }
+        }
+        
+         @-webkit-keyframes rotate {
+            from {
+                -webkit-transform: rotate(0deg);
+            }
+            to { 
+                -webkit-transform: rotate(360deg);
+            }
+        }
+        
+        .load {
+            width: 100px;
+            height: 100px;
+            margin: 110px auto 0;
+            border:solid 10px #8822aa;
+            border-radius: 50%;
+            border-right-color: transparent;
+            border-bottom-color: transparent;
+             -webkit-transition: all 0.5s ease-in;
+            -webkit-animation-name:             rotate; 
+            -webkit-animation-duration:         1.0s; 
+            -webkit-animation-iteration-count:  infinite;
+            -webkit-animation-timing-function: linear;
+                
+                 transition: all 0.5s ease-in;
+            animation-name:             rotate; 
+            animation-duration:         1.0s; 
+            animation-iteration-count:  infinite;
+            animation-timing-function: linear; 
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-scrren bg-gray-100 font-sans antialiased">
+    <!-- Navbar -->
+    <nav class="bg-blue-600 p-4 text-white flex justify-between">
+        <div>
+            <h1 class="text-3xl font-bold">Youtube Chat</h1>
+        </div>
+    </nav>
+
+    <br>
+    <br>
+
+    <!-- Main -->
+    <div class="flex-grow container mx-auto mt-10 px-4 sm:px-0">
+        <div class="max-w-3xl mx-auto bg-white p-6 rounded-lg shadow-md transition-transform transform hover:scale-105 flex flex-col">
+            
+            <!-- Introduction section -->
+            <div class="text-center">
+                <h2 class="text-2xl font-semibold mb-4">ようこそ Youtube Chat へ</h2>
+                <p class="text-gray-700">
+                    Youtube ChatはYoutube動画のリンクを入力すると、その動画についてAIがチャット形式で教えてくれます。
+                    要約や質問に対する応答が可能で、英語で話される海外のYoutubeや長時間のコンテンツなどの理解をサポートします。
+                </p>
+            </div>
+
+            <br>
+
+            <!-- Youtube section -->
+            <div>
+                <h2 class="text-xl mb-4 font-semibold">Enter Youtube Video Link</h2>
+                <div class="flex space-x-4">
+                    <input id="youtubelink" type="url" placeholder="Paste Youtube Link..." class="flex-grow p-2 border border-blue-400 rounded-md">
+                    <button id="startchatbutton" class="bg-blue-600 text-white px-4 py-2 rounded-r-md hover:bg-blue-700 transition-colors">Start</button>
+                </div>
+            </div>
+
+            <!-- section for loading circle -->
+            <div style="display: none;" id="loading-circle" class="load"></div>
+
+            <!-- Youtube Chat Section -->
+            <section class="mt-10 flex-grow">
+                <h2 class="text-xl mb-4 font-semibold">Youtube Chat 画面</h2>
+                <div id="chatcontent" class="text-gray-700 space-y-4">
+                    <!-- startchat -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <footer class="text-center p-4 text-blacl mt-6">
+        Made by Yu Sugimoto.
+    </footer>
+
+    <script>
+        document.getElementById('startchatbutton').addEventListener('click', async() => {
+
+            const youtubeLink = document.getElementById('youtubelink').value;
+            const chatContent = document.getElementById('chatcontent');
+
+            if(youtubeLink){
+
+                // show laoding circle
+                document.getElementById('loading-circle').style.display = 'block';
+                // clear previous content
+                chatContent.innerHTML = '';
+                // setting endpointurl
+                const endpointUrl = '/generate-chat';
+
+                try{
+                    const response = await fetch(endpointUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({link: youtubeLink})
+                    });
+                    // Get jsonresponse asynchronously
+                    const data = await response.json();
+
+                    var contentHTML = `
+                    <div class="flex-1 flex flex-col bg-white overflow-hidden shadow-md" hx-ext="ws" ws-connect="/ws/chatgpt-demo/">
+                        <div id="message-list" class="p-6 flex-1 max-h-96 overflow-y-scroll">
+                            <div class="mb-4">
+                                <div id="chatsummary" class="mt-1 bg-gray-200 rounded-lg px-4 py-2 text-gray-800"></div>
+                            </div>
+                        </div>
+                        <form class="border-t-2 border-gray-200 px-4 py-4 mb-2 sm:mb-0" ws-send>
+                            <div class="relative flex">
+                                <input type="text" id="raginput" placeholder="聞きたいことはありますか..." name="message" class="pl-4 pr-10 py-3 rounded-xl border-2 border-gray-200 w-full focus:outline-none focus:border-indigo-300">
+                                <button type="submit" id="ragbutton" class="ml-2 bg-blue-600 text-white rounded-xl px-4 py-2 hover:bg-blue-700">Send</button>
+                            </div>
+                        </form>
+                    </div>
+                    `;
+                    chatContent.innerHTML = contentHTML;
+                    // add title
+                    document.getElementById('chatsummary').innerHTML = "タイトル： 「" + data.title + "」<br><br>";
+                    // return summary
+                    document.getElementById('chatsummary').innerHTML += data.content;
+                    // rescan apprnd html inculeded 'htmx' with htmx
+                    htmx.process(chatContent);
+                }catch(error){
+                    console.error("エラーが起きました：", error);
+                    alert("エラーが起きました。再度トライしてください。");
+                }
+                // once send all data, return display='none'
+                document.getElementById('loading-circle').style.display = 'none';
+            }else{
+                alert("Youtube Link を入力してください")
+            }
+
+        });
+
+        htmx.debug = true;
+
+        // Checking Websocket Connection
+        document.addEventListener('htmx:wsOpen', function(event) {
+        console.log('WebSocket connection established.');
+        });
+        document.addEventListener('htmx:wsError', function(event) {
+        console.error('WebSocket error:', event.detail.error);
+        });
+        document.addEventListener('htmx:wsClose', function(event) {
+        console.log('WebSocket connection closed.');
+        });
+    </script>
+
+</body>
+</html>
