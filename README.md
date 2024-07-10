@@ -7,7 +7,7 @@ Youtubeで海外のコンテンツをよく見ますが, 1時間近くあるも�
 
 ## 概要
 
-このDjangoアプリケーションでは, Youtube動画の文字起こし（AssemblyAI）, Youtube動画の翻訳及び要約（OpenAI）, Youtube動画に関する質疑応答（RAG）を実装しました. 
+このDjangoアプリケーションでは, Youtube動画の文字起こし（AssemblyAI）, Youtube動画の翻訳および要約（OpenAI）, Youtube動画に関する質疑応答（RAG）を実装しました. 
 ユーザーからYoutube動画のリンクを受け取ると, その動画をダウンロードし, 文字起こしされたトランスクリプトを取得, 要約してチャットボットが出力します. 
 その後, Websocket接続を行い, 非同期でRAGを用いた質疑応答が可能になります. 
 
